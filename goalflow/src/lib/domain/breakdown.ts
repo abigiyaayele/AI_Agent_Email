@@ -81,7 +81,9 @@ export function generateBreakdown(input: BreakdownInput, cap: Capacity, today: s
   const span = input.targetValue - input.startValue;
   const valueAt = (date: DateTime) => {
     const f = Math.min(1, Math.max(0, (date.diff(s, "days").days + 1) / totalDays));
-    return round(input.startValue + span * f, 2);
+    const v = input.startValue + span * f;
+    // Whole-number goals (books, workouts) get whole-number checkpoints.
+    return Number.isInteger(input.startValue) && Number.isInteger(input.targetValue) ? Math.round(v) : round(v, 2);
   };
   const hoursFor = (a: DateTime, b: DateTime) => round(input.estimatedHours * ((b.diff(a, "days").days + 1) / totalDays));
 
@@ -170,13 +172,17 @@ export function generateBreakdown(input: BreakdownInput, cap: Capacity, today: s
   goals.push(...weeks);
 
   // Daily actions only for the first upcoming week, spread over working days.
-  const firstWeek = weeks.find((w) => w.targetDate >= today);
-  if (firstWeek && input.sessionsPerWeek > 0) {
-    const from = firstWeek.startDate < today ? today : firstWeek.startDate;
-    const days: string[] = [];
-    for (let d = from; d <= firstWeek.targetDate; d = addDays(d, 1)) {
-      if (cap.workingDays.includes(isoWeekday(d))) days.push(d);
+  const workingDaysOf = (w: DraftGoal) => {
+    const out: string[] = [];
+    for (let d = w.startDate < today ? today : w.startDate; d <= w.targetDate; d = addDays(d, 1)) {
+      if (cap.workingDays.includes(isoWeekday(d))) out.push(d);
     }
+    return out;
+  };
+  // First upcoming week that still has a working day left.
+  const firstWeek = weeks.find((w) => w.targetDate >= today && workingDaysOf(w).length > 0);
+  if (firstWeek && input.sessionsPerWeek > 0) {
+    const days = workingDaysOf(firstWeek);
     const n = Math.min(input.sessionsPerWeek, Math.max(days.length, 1) * 2, 14);
     for (let i = 0; i < n && days.length; i++) {
       tasks.push({
