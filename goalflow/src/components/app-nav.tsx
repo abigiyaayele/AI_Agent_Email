@@ -64,8 +64,9 @@ function NavLinks({ path, unread, onNavigate }: { path: string; unread: number; 
             <Icon size={16} aria-hidden />
             <span className="flex-1">{label}</span>
             {href === "/notifications" && unread > 0 ? (
-              <span className="rounded-full bg-accent px-1.5 text-xs text-accent-fg" aria-label={`${unread} unread`}>
+              <span className="rounded-full bg-accent px-1.5 text-xs text-accent-fg">
                 {unread}
+                <span className="sr-only"> unread</span>
               </span>
             ) : null}
           </Link>

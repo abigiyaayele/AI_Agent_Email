@@ -31,13 +31,13 @@ export function DayTimeline({ items, dayStart, tz, fromHour = 7, toHour = 22 }: 
   const lanes = assignLanes(items.map((i) => ({ id: i.id, start: i.start.getTime(), end: i.end.getTime() })));
   const nowTop = Date.now() >= dayStart.getTime() && Date.now() < dayStart.getTime() + 86_400_000 ? top(new Date()) : null;
   return (
-    <div className="relative" style={{ height: span * pxPerMin }} aria-label="Day timeline">
+    <div className="relative" style={{ height: span * pxPerMin }} role="group" aria-label="Day timeline">
       {Array.from({ length: hours.to - hours.from + 1 }, (_, i) => (
         <div key={i} className="absolute inset-x-0 flex items-start border-t border-border/70" style={{ top: i * 60 * pxPerMin }}>
           <span className="-mt-2 w-11 bg-surface pr-1 text-right text-[10px] text-muted tabular-nums">{String(hours.from + i).padStart(2, "0")}:00</span>
         </div>
       ))}
-      {nowTop !== null ? <div className="absolute right-0 left-11 z-10 border-t-2 border-danger" style={{ top: nowTop }} aria-label="Now" /> : null}
+      {nowTop !== null ? <div className="absolute right-0 left-11 z-10 border-t-2 border-danger" style={{ top: nowTop }} aria-hidden /> : null}
       <ul>
         {items.map((it) => {
           const { lane, lanes: n } = lanes.get(it.id)!;

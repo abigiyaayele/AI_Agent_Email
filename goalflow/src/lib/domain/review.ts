@@ -49,8 +49,11 @@ export function computePeriodMetrics(
   now: Date = new Date(),
 ): PeriodMetrics {
   const plannedTasks = input.tasks.filter((t) => inRange(t.scheduledStart ?? t.dueAt, from, to));
-  const completedTasks = input.tasks.filter((t) => t.status === "done" && inRange(t.completedAt, from, to));
   const completedPlanned = plannedTasks.filter((t) => t.status === "done");
+  // Done = finished during the period, plus work planned for it that was finished early.
+  const completedIds = new Set(input.tasks.filter((t) => t.status === "done" && inRange(t.completedAt, from, to)).map((t) => t.id));
+  completedPlanned.forEach((t) => completedIds.add(t.id));
+  const completedTasks = input.tasks.filter((t) => completedIds.has(t.id));
   const withDue = completedTasks.filter((t) => t.dueAt);
   const onTime = withDue.filter((t) => t.completedAt! <= t.dueAt!).length;
 

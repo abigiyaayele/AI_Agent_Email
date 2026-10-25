@@ -41,7 +41,7 @@ export function NotificationList({ items, empty }: { items: NotificationItem[]; 
       <ul className="divide-y divide-border">
         {items.map((n) => (
           <li key={n.id} className={cn("flex flex-wrap items-start gap-2 py-3", n.read && "opacity-70")}>
-            <span className={cn("mt-1.5 h-2 w-2 shrink-0 rounded-full", n.read ? "bg-transparent" : "bg-accent")} aria-label={n.read ? undefined : "Unread"} />
+            <span className={cn("mt-1.5 h-2 w-2 shrink-0 rounded-full", n.read ? "bg-transparent" : "bg-accent")} {...(n.read ? { "aria-hidden": true } : { role: "img", "aria-label": "Unread" })} />
             <div className="min-w-0 flex-1">
               {n.url ? (
                 <Link href={n.url} className="font-medium hover:underline" onClick={() => !n.read && start(() => markNotificationsAction([n.id], "read"))}>

@@ -10,3 +10,6 @@ next-env.d.ts
 test-results
 playwright-report
 .smoke.mjs
+e2e/.auth/
+test-results/
+playwright-report/

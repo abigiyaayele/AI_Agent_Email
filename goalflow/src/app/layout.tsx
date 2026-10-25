@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Turn long-term ambitions into daily action.",
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, title: "GoalFlow", statusBarStyle: "default" },
-  icons: { icon: "/icons/icon.svg", apple: "/icons/icon-192.png" },
+  icons: { icon: "/icons/icon.svg", apple: "/icons/apple-touch-icon.png" },
 };
 
 export const viewport: Viewport = {

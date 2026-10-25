@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: goalflow
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-goalflow}
+      POSTGRES_DB: goalflow
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U goalflow"]
+      interval: 5s
+      retries: 10
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://goalflow:${POSTGRES_PASSWORD:-goalflow}@db:5432/goalflow
+      INPROCESS_SCHEDULER: "true"
+    ports:
+      - "3000:3000"
+volumes:
+  pgdata:

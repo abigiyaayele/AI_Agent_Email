@@ -99,7 +99,7 @@ export default async function TimesheetPage({ searchParams }: { searchParams: Pr
       {view !== "day" ? (
         <Card>
           <CardHeader title="Per day" />
-          <div className="flex h-40 items-end gap-1" role="img" aria-label="Focus minutes per day">
+          <div className="flex h-40 items-end gap-1" role="group" aria-label="Focus minutes per day">
             {sheet.days.map((d) => (
               <Link
                 key={d.key}

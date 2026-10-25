@@ -37,7 +37,7 @@ export function FocusChart({ data }: { data: { date: string; label: string; focu
           <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--surface-2)" }} formatter={(v, name) => [fmt(Number(v)), name]} />
           <Legend wrapperStyle={{ fontSize: 12, color: "var(--muted)" }} iconType="plainline" />
           <Bar dataKey="focus" name="Focus time" fill="var(--series-1)" radius={[4, 4, 0, 0]} maxBarSize={28} cursor="pointer" />
-          <Line dataKey="planned" name="Estimated for planned tasks" stroke="var(--series-2)" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 5 }} type="linear" isAnimationActive={false} />
+          <Line dataKey="planned" name="Estimated for planned tasks" stroke="var(--series-2)" strokeWidth={2} dot={{ r: 4, fill: "var(--surface)" }} activeDot={{ r: 5 }} type="linear" isAnimationActive={false} />
         </ComposedChart>
       </ResponsiveContainer>
     </div>
@@ -68,7 +68,7 @@ export function CompletionChart({ data }: { data: { start: string; label: string
               return [`${v}% (${p.completed} of ${p.planned})`, "Completed"];
             }}
           />
-          <Line dataKey="completionRate" stroke="var(--series-1)" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} connectNulls={false} cursor="pointer" type="linear" isAnimationActive={false} />
+          <Line dataKey="completionRate" stroke="var(--series-1)" strokeWidth={2} dot={{ r: 4, fill: "var(--surface)" }} activeDot={{ r: 6 }} connectNulls={false} cursor="pointer" type="linear" isAnimationActive={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -109,7 +109,7 @@ export function GoalHistoryChart({ data, unit }: { data: { at: string; pct: numb
               return [`${v}%${val !== null ? ` (${val} ${unit})` : ""}`, "Progress"];
             }}
           />
-          <Line dataKey="pct" stroke="var(--series-1)" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+          <Line dataKey="pct" stroke="var(--series-1)" strokeWidth={2} dot={{ r: 4, fill: "var(--surface)" }} activeDot={{ r: 6 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>

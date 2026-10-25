@@ -1,12 +1,12 @@
 "use client";
 
-import { createContext, useActionState, useContext, useEffect, useRef, type ReactNode } from "react";
-import { useFormStatus } from "react-dom";
+import { createContext, startTransition, useActionState, useContext, useEffect, useRef, type ReactNode } from "react";
 import type { ActionResult } from "@/lib/validation/common";
 import { buttonClass } from "./index";
 
 type State = ActionResult<unknown> | null;
 const FormCtx = createContext<State>(null);
+const PendingCtx = createContext(false);
 
 /**
  * Wraps a server action with pending state, field errors and a visible success/error message.
@@ -29,7 +29,7 @@ export function ActionForm({
   showMessage?: boolean;
   id?: string;
 }) {
-  const [state, formAction] = useActionState(action, null);
+  const [state, formAction, pending] = useActionState(action, null);
   const ref = useRef<HTMLFormElement>(null);
   const onSuccessRef = useRef(onSuccess);
   onSuccessRef.current = onSuccess;
@@ -41,10 +41,24 @@ export function ActionForm({
   }, [state, resetOnSuccess]);
   return (
     <FormCtx.Provider value={state}>
-      <form ref={ref} action={formAction} className={className} id={id} noValidate>
-        {children}
-        {showMessage ? <FormMessage /> : null}
-      </form>
+      <PendingCtx.Provider value={pending}>
+        {/* Dispatched manually so a failed submit keeps what the user typed (React resets forms
+            submitted through the `action` prop). */}
+        <form
+          ref={ref}
+          className={className}
+          id={id}
+          noValidate
+          onSubmit={(e) => {
+            e.preventDefault();
+            const fd = new FormData(e.currentTarget, (e.nativeEvent as SubmitEvent).submitter);
+            startTransition(() => formAction(fd));
+          }}
+        >
+          {children}
+          {showMessage ? <FormMessage /> : null}
+        </form>
+      </PendingCtx.Provider>
     </FormCtx.Provider>
   );
 }
@@ -107,7 +121,6 @@ export function SubmitButton({
   pendingText,
   name,
   value,
-  formAction,
 }: {
   children: ReactNode;
   variant?: "primary" | "secondary" | "ghost" | "danger";
@@ -116,15 +129,13 @@ export function SubmitButton({
   pendingText?: string;
   name?: string;
   value?: string;
-  formAction?: (fd: FormData) => void;
 }) {
-  const { pending } = useFormStatus();
+  const pending = useContext(PendingCtx);
   return (
     <button
       type="submit"
       name={name}
       value={value}
-      formAction={formAction}
       disabled={pending}
       aria-busy={pending}
       className={buttonClass(variant, size, className)}
