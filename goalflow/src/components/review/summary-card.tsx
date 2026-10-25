@@ -43,7 +43,7 @@ export function SummaryCard({
                 setText(r.data.text);
                 setSource(r.data.source);
                 if (r.message) setNote(r.message);
-              }
+              } else if (!r.ok) setNote(r.error);
             })
           }
         >
