@@ -133,11 +133,35 @@ export type SessionRow = {
   taskTitle?: string | null;
 };
 
-export function SessionEditor({ taskId, defaults, onDone }: { taskId: string | null; defaults?: SessionRow; onDone?: () => void }) {
+export function SessionEditor({
+  taskId,
+  defaults,
+  onDone,
+  tasks,
+}: {
+  taskId: string | null;
+  defaults?: SessionRow;
+  onDone?: () => void;
+  /** When given, the user picks the task instead of it being fixed. */
+  tasks?: { id: string; title: string }[];
+}) {
   return (
     <ActionForm action={saveSessionAction} resetOnSuccess={!defaults} onSuccess={onDone} className="grid gap-2 sm:grid-cols-[1fr_1fr_7rem] sm:items-end">
       {defaults ? <input type="hidden" name="id" value={defaults.id} /> : null}
-      <input type="hidden" name="taskId" value={taskId ?? ""} />
+      {tasks ? (
+        <Field label="Task" htmlFor={`s-task-${defaults?.id ?? "new"}`} className="sm:col-span-3">
+          <Select id={`s-task-${defaults?.id ?? "new"}`} name="taskId" defaultValue={taskId ?? ""}>
+            <option value="">No task</option>
+            {tasks.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.title}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      ) : (
+        <input type="hidden" name="taskId" value={taskId ?? ""} />
+      )}
       <Field label="Start" htmlFor={`s-start-${defaults?.id ?? "new"}`}>
         <Input id={`s-start-${defaults?.id ?? "new"}`} name="start" type="datetime-local" defaultValue={defaults?.start} />
         <FieldError name="start" />
