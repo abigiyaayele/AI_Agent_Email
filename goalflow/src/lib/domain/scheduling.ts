@@ -170,3 +170,31 @@ export function proposeRebalance(
   }
   return { proposals, unresolved };
 }
+
+/**
+ * Assign side-by-side lanes to overlapping blocks (calendar layout). Each item gets its lane index
+ * and the lane count of its overlap cluster, so overlapping items never hide behind each other.
+ */
+export function assignLanes(items: { id: string; start: number; end: number }[]): Map<string, { lane: number; lanes: number }> {
+  const sorted = [...items].sort((a, b) => a.start - b.start || b.end - a.end);
+  const out = new Map<string, { lane: number; lanes: number }>();
+  let cluster: string[] = [];
+  let laneEnds: number[] = [];
+  let clusterEnd = -Infinity;
+  const flush = () => {
+    for (const id of cluster) out.get(id)!.lanes = laneEnds.length;
+    cluster = [];
+    laneEnds = [];
+  };
+  for (const it of sorted) {
+    if (it.start >= clusterEnd) flush();
+    let lane = laneEnds.findIndex((end) => end <= it.start);
+    if (lane === -1) lane = laneEnds.push(0) - 1;
+    laneEnds[lane] = it.end;
+    clusterEnd = Math.max(clusterEnd, it.end);
+    cluster.push(it.id);
+    out.set(it.id, { lane, lanes: 1 });
+  }
+  flush();
+  return out;
+}

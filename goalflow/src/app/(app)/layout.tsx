@@ -4,10 +4,13 @@ import { buttonClass } from "@/components/ui";
 import { logoutAction } from "@/server/actions/auth";
 import { requireAuth } from "@/server/auth/session";
 import { unreadCount } from "@/server/services/reminders";
+import { activeSessions } from "@/server/services/timer";
+import { ActiveTimers } from "@/components/timer/active-timer";
+import { serializeSessions } from "@/server/services/timer-view";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const { user } = await requireAuth();
-  const unread = await unreadCount(user.id);
+  const [unread, running] = await Promise.all([unreadCount(user.id), activeSessions(user.id)]);
   const footer = (
     <div className="mt-3 border-t border-border pt-3">
       <p className="truncate px-2.5 text-sm font-medium">{user.name || user.email}</p>
@@ -29,6 +32,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       </aside>
       <MobileNav unread={unread} footer={footer} />
       <main id="main" className="mx-auto w-full max-w-6xl min-w-0 flex-1 px-4 pt-4 pb-24 sm:px-6 lg:pt-6 lg:pb-10">
+        {running.length ? (
+          <div className="sticky top-12 z-20 -mx-1 mb-4 lg:top-2">
+            <ActiveTimers sessions={serializeSessions(running)} serverNow={new Date().toISOString()} />
+          </div>
+        ) : null}
         {children}
       </main>
     </div>

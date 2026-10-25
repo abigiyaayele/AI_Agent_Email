@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { generateBreakdown } from "@/lib/domain/breakdown";
 import { isValidChildLevel, validateParent, wouldCreateCycle } from "@/lib/domain/hierarchy";
 import { computePeriodMetrics, ruleBasedSummary } from "@/lib/domain/review";
-import { commitmentsOn, findConflicts, findFreeSlot, proposeRebalance, workloadByDay } from "@/lib/domain/scheduling";
+import { assignLanes, commitmentsOn, findConflicts, findFreeSlot, proposeRebalance, workloadByDay } from "@/lib/domain/scheduling";
 import { canTransition, carryOverPatch, statusPatch } from "@/lib/domain/tasks";
 
 describe("goal hierarchy", () => {
@@ -155,5 +155,20 @@ describe("period metrics", () => {
     const text = ruleBasedSummary("Today", m);
     expect(text).toContain("Write intro");
     expect(text).toContain("Edit draft (todo)");
+  });
+});
+
+describe("calendar lanes", () => {
+  it("puts overlapping blocks side by side and leaves separate blocks full width", () => {
+    const lanes = assignLanes([
+      { id: "a", start: 600, end: 660 },
+      { id: "b", start: 600, end: 645 },
+      { id: "c", start: 650, end: 700 },
+      { id: "d", start: 800, end: 830 },
+    ]);
+    expect(lanes.get("a")).toEqual({ lane: 0, lanes: 2 });
+    expect(lanes.get("b")).toEqual({ lane: 1, lanes: 2 });
+    expect(lanes.get("c")).toEqual({ lane: 1, lanes: 2 });
+    expect(lanes.get("d")).toEqual({ lane: 0, lanes: 1 });
   });
 });
