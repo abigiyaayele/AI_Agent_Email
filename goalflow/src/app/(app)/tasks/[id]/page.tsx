@@ -18,6 +18,8 @@ import { db } from "@/server/db/client";
 import * as s from "@/server/db/schema";
 import { goalOptions, toSessionRow, toTaskItem } from "@/server/services/task-view";
 import { getTask } from "@/server/services/tasks";
+import { listNotes, snippet } from "@/server/services/notes";
+import { LinkedNotes } from "@/components/notes/linked-notes";
 
 export const metadata = { title: "Task" };
 
@@ -46,13 +48,14 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
   const d = await getTask(user.id, id);
   if (!d) notFound();
   const t = d.task;
-  const [goals, candidates] = await Promise.all([
+  const [goals, candidates, notes] = await Promise.all([
     goalOptions(user.id),
     db()
       .select({ id: s.tasks.id, title: s.tasks.title })
       .from(s.tasks)
       .where(and(eq(s.tasks.userId, user.id), ne(s.tasks.id, id), ne(s.tasks.status, "done")))
       .limit(300),
+    listNotes(user.id, { taskId: id, limit: 10 }),
   ]);
   const startRem = d.reminders.find((r) => r.kind === "task_start");
   const dueRem = d.reminders.find((r) => r.kind === "deadline");
@@ -142,6 +145,14 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
               action={<NewTaskButton goals={goals} label="Subtask" defaults={{ parentTaskId: t.id, goalId: t.goalId ?? "", milestoneId: t.milestoneId ?? "" }} />}
             />
             <TaskListView items={d.subtasks.map((st) => toTaskItem({ task: st, goalTitle: d.goal?.title ?? null }, tz))} />
+          </Card>
+          <Card>
+            <CardHeader title="Notes" />
+            <LinkedNotes
+              kind="task"
+              link={{ taskId: t.id, goalId: t.goalId ?? undefined }}
+              notes={notes.map((n) => ({ id: n.note.id, title: n.note.title, excerpt: snippet(n.note.body, undefined, 120), when: formatInstant(n.note.updatedAt, tz, "d LLL") }))}
+            />
           </Card>
           <Card>
             <CardHeader title="Blocked by" />

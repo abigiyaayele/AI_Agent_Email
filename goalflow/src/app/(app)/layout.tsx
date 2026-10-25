@@ -7,6 +7,7 @@ import { unreadCount } from "@/server/services/reminders";
 import { activeSessions } from "@/server/services/timer";
 import { ActiveTimers } from "@/components/timer/active-timer";
 import { serializeSessions } from "@/server/services/timer-view";
+import { NotificationPoller } from "@/components/notification-poller";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const { user } = await requireAuth();
@@ -39,6 +40,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         ) : null}
         {children}
       </main>
+      <NotificationPoller initialUnread={unread} />
     </div>
   );
 }

@@ -13,6 +13,8 @@ import { titleCase } from "@/lib/format";
 import { requireAuth } from "@/server/auth/session";
 import { addMilestoneAction, recordProgressAction, updateGoalAction } from "@/server/actions/goals";
 import { getGoalDetail } from "@/server/services/goals";
+import { listNotes, snippet } from "@/server/services/notes";
+import { LinkedNotes } from "@/components/notes/linked-notes";
 import { descendantIds } from "@/lib/domain/hierarchy";
 
 export const metadata = { title: "Goal" };
@@ -21,7 +23,7 @@ export default async function GoalPage({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const { user, prefs } = await requireAuth();
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
-  const d = await getGoalDetail(user.id, id, prefs);
+  const [d, notes] = await Promise.all([getGoalDetail(user.id, id, prefs), listNotes(user.id, { goalId: id, limit: 10 })]);
   if (!d) notFound();
   const { goal: g } = d;
   const tz = prefs.timezone;
@@ -196,6 +198,15 @@ export default async function GoalPage({ params }: { params: Promise<{ id: strin
           </ActionForm>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader title="Notes" subtitle="Ideas, reflections and decisions about this goal." />
+        <LinkedNotes
+          kind="goal"
+          link={{ goalId: g.id }}
+          notes={notes.map((n) => ({ id: n.note.id, title: n.note.title, excerpt: snippet(n.note.body, undefined, 120), when: formatInstant(n.note.updatedAt, tz, "d LLL") }))}
+        />
+      </Card>
 
       <Card>
         <CardHeader

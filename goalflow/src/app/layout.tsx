@@ -1,3 +1,4 @@
+import { SwRegister } from "@/components/sw-register";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { getAuth } from "@/server/auth/session";
@@ -46,7 +47,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-dvh">{configIssues ? <SetupRequired issues={configIssues} /> : children}</body>
+      <body className="min-h-dvh">
+        {configIssues ? <SetupRequired issues={configIssues} /> : children}
+        <SwRegister />
+      </body>
     </html>
   );
 }

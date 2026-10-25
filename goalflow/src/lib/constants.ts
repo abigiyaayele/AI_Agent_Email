@@ -80,6 +80,7 @@ export type ReminderKind = (typeof REMINDER_KINDS)[number];
 
 export const CHANNELS = ["in_app", "push", "email"] as const;
 export type Channel = (typeof CHANNELS)[number];
+export const CHANNEL_LABEL: Record<Channel, string> = { in_app: "In-app", push: "Push / browser", email: "Email" };
 
 export const NOTE_KINDS = ["quick", "journal", "task", "goal", "session", "review", "reflection"] as const;
 export type NoteKind = (typeof NOTE_KINDS)[number];
