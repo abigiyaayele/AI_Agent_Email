@@ -28,7 +28,7 @@ npm run build
 DATABASE_URL=postgres://goalflow:goalflow@localhost:5432/goalflow npm run test:e2e
 ```
 
-Playwright starts `npm run start` on port 3100 (or reuses a server already running there). Each
+Playwright starts `next start` on port 3100 (or reuses a server already running there). Each
 run creates fresh accounts (one per device project) and clears the sign-up rate limiter first,
 so repeated runs are fine. Use a development database, not production.
 

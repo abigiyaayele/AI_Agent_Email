@@ -21,6 +21,6 @@ services:
       DATABASE_URL: postgres://goalflow:${POSTGRES_PASSWORD:-goalflow}@db:5432/goalflow
       INPROCESS_SCHEDULER: "true"
     ports:
-      - "3000:3000"
+      - "3002:3002"
 volumes:
   pgdata:

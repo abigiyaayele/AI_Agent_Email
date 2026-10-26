@@ -21,7 +21,7 @@ periodically; pick the option that matches your host.
 npm ci
 npm run build
 npm run db:migrate
-INPROCESS_SCHEDULER=true npm run start -- -p 3000
+INPROCESS_SCHEDULER=true npm run start
 ```
 
 With `INPROCESS_SCHEDULER=true` the web process dispatches reminders itself. If you run several
@@ -31,7 +31,7 @@ safe, just unnecessary: reminders are claimed with row locks and de-duplicated b
 A `Dockerfile` and `docker-compose.yml` are included:
 
 ```bash
-docker compose up -d --build                 # app on :3000, Postgres on a volume
+docker compose up -d --build                 # app on :3002, Postgres on a volume
 docker compose exec app npm run db:migrate
 ```
 

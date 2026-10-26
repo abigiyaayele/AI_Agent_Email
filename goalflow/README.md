@@ -14,7 +14,7 @@ cd goalflow
 npm install
 cp .env.example .env          # set DATABASE_URL at minimum
 npm run db:migrate
-npm run dev                   # http://localhost:3000
+npm run dev                   # http://localhost:3002
 ```
 
 Create a database locally if needed:
