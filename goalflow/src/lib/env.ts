@@ -6,7 +6,7 @@ import { z } from "zod";
  */
 const EnvSchema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-  APP_URL: z.string().url().default("http://localhost:3000"),
+  APP_URL: z.string().url().default("http://localhost:3002"),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   CRON_SECRET: z.string().optional(),
   INPROCESS_SCHEDULER: z

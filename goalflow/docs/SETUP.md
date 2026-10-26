@@ -50,7 +50,7 @@ npm run db:migrate
 ## 4. Run
 
 ```bash
-npm run dev          # http://localhost:3000
+npm run dev          # http://localhost:3002
 ```
 
 Optional demo data, so every screen has something to show:

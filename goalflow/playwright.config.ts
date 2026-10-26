@@ -25,7 +25,7 @@ export default defineConfig({
     { name: "mobile", dependencies: ["setup"], use: { ...devices["Pixel 7"], storageState: "e2e/.auth/mobile.json" } },
   ],
   webServer: {
-    command: `npm run start -- -p ${PORT}`,
+    command: `npx next start -p ${PORT}`,
     port: PORT,
     reuseExistingServer: true,
     timeout: 120_000,
