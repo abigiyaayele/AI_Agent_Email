@@ -35,11 +35,14 @@ async function main() {
   const week = periodContaining("week", today, TZ, prefs.weekStartsOn);
 
   const base = { description: "", category: "education" as const, direction: "increase" as const, startValue: 0, currentValue: 0, priority: "high" as const, status: "active" as const, weight: 1 };
+  // A week goal must sit inside its month, so clip weeks that cross a month boundary.
+  const weekStart = week.start < month.start ? month.start : week.start;
+  const weekEnd = week.end > month.end ? month.end : week.end;
   const yearGoal = await createGoal(user.id, { ...base, title: "Read 24 books", level: "year", parentId: null, startDate: year.start, targetDate: year.end, metricType: "numeric", unit: "books", targetValue: 24, estimatedHours: 240 });
   const halfGoal = await createGoal(user.id, { ...base, title: "Read 12 books", level: "half", parentId: yearGoal.id, startDate: half.start, targetDate: half.end, metricType: "numeric", unit: "books", targetValue: 12, estimatedHours: 120 });
   const qGoal = await createGoal(user.id, { ...base, title: "Read 6 books", level: "quarter", parentId: halfGoal.id, startDate: quarter.start, targetDate: quarter.end, metricType: "numeric", unit: "books", targetValue: 6, estimatedHours: 60 });
   const mGoal = await createGoal(user.id, { ...base, title: "Read 2 books", level: "month", parentId: qGoal.id, startDate: month.start, targetDate: month.end, metricType: "tasks", unit: "", targetValue: null, estimatedHours: 20 });
-  const wGoal = await createGoal(user.id, { ...base, title: "Read 120 pages", level: "week", parentId: mGoal.id, startDate: week.start, targetDate: week.end, metricType: "numeric", unit: "pages", targetValue: 120, estimatedHours: 5 });
+  const wGoal = await createGoal(user.id, { ...base, title: "Read 120 pages", level: "week", parentId: mGoal.id, startDate: weekStart, targetDate: weekEnd, metricType: "numeric", unit: "pages", targetValue: 120, estimatedHours: 5 });
   await recordProgress(user.id, yearGoal.id, 15, "Seed data");
   await recordProgress(user.id, wGoal.id, 45, "Seed data");
   const fitness = await createGoal(user.id, { ...base, title: "Run a half marathon", category: "health", level: "year", parentId: null, startDate: year.start, targetDate: year.end, metricType: "milestones", unit: "", targetValue: null, estimatedHours: 150 });
