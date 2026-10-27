@@ -3,10 +3,12 @@ import { PASSWORD, register } from "./helpers";
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
-test("sign up, sign out, reject a wrong password, sign back in", async ({ page, isMobile }) => {
+test("sign up, sign out, reject a wrong password, sign back in", async ({ page }) => {
   const email = await register(page);
 
-  if (isMobile) await page.getByRole("button", { name: "Open menu" }).click();
+  // Phones and tablets keep "Sign out" in the slide-out menu.
+  const menu = page.getByRole("button", { name: "Open menu" });
+  if (await menu.isVisible()) await menu.click();
   await page.getByRole("button", { name: "Sign out" }).click();
   await expect(page).toHaveURL(/\/login/);
 

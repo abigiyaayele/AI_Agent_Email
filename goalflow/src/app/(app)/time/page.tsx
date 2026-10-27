@@ -13,6 +13,12 @@ import { buildTimesheet, type TimesheetRow } from "@/server/services/timesheet";
 
 export const metadata = { title: "Timesheet" };
 
+/** On narrow screens a month has no room for 31 labels; keep the 1st and every 5th day. */
+const sparseLabel = (date: string) => {
+  const day = Number(date.slice(8, 10));
+  return day === 1 || day % 5 === 0;
+};
+
 function Breakdown({ rows, total }: { rows: TimesheetRow[]; total: number }) {
   if (!rows.length) return <p className="text-sm text-muted">No time recorded.</p>;
   return (
@@ -109,7 +115,7 @@ export default async function TimesheetPage({ searchParams }: { searchParams: Pr
               >
                 <div className="rounded-t bg-info/40" style={{ height: `${(d.breaks / maxDay) * 85}%` }} />
                 <div className={cn("bg-accent group-hover:opacity-80", d.breaks ? "" : "rounded-t")} style={{ height: `${(d.focus / maxDay) * 85}%` }} />
-                <span className={cn("mt-1 truncate text-center text-[10px] text-muted", d.key === today && "font-semibold text-accent")}>{formatDate(d.key, view === "week" ? "EEE" : "d")}</span>
+                <span className={cn("mt-1 text-center text-[10px] whitespace-nowrap text-muted", d.key === today && "font-semibold text-accent", view === "month" && d.key !== today && !sparseLabel(d.key) && "invisible sm:visible")}>{formatDate(d.key, view === "week" ? "EEE" : "d")}</span>
               </Link>
             ))}
           </div>

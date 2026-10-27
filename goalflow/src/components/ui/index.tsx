@@ -84,8 +84,8 @@ export function Card({ className, ...props }: ComponentProps<"section">) {
 
 export function CardHeader({ title, action, subtitle }: { title: ReactNode; action?: ReactNode; subtitle?: ReactNode }) {
   return (
-    <div className="mb-3 flex items-start justify-between gap-3">
-      <div className="min-w-0">
+    <div className="mb-3 flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+      <div className="min-w-0 flex-1 basis-48">
         <h2 className="text-base font-semibold">{title}</h2>
         {subtitle ? <p className="text-sm text-muted">{subtitle}</p> : null}
       </div>

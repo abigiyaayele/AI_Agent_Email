@@ -5,7 +5,7 @@
 | Type check | `npm run typecheck` | Strict TypeScript across app, scripts and tests |
 | Unit | `npm run test:unit` | Pure domain logic: progress (incl. inverse goals and milestone weights), pace and forecasts, estimation, scheduling and overlap detection, rebalancing, recurrence, DST-safe periods, timer math, reminders, reviews, plan breakdown |
 | Integration | `npm run test:integration` | Services against a real PostgreSQL database: auth and rate limiting, data export and account deletion, goal hierarchy rules, progress roll-up, guided plans, task scheduling conflicts, status transitions and dependencies, carry-over history, recurring task generation, focus timer (pause/resume, parallel-timer protection, corrections), timesheets across midnight, notes search/conflicts, exactly-once reminder delivery across DST, reviews and AI summaries (with a fake AI provider), assistant validation, analytics, and cross-user isolation |
-| End-to-end | `npm run test:e2e` | Playwright in a desktop (1366×900) and a mobile (Pixel 7) browser: sign up / sign out / sign in, planning a day with overlap protection and the daily summary, calendar, focus timer surviving a reload, note autosave and search, reminders, plus an axe accessibility scan and a no-horizontal-scroll check on every main page |
+| End-to-end | `npm run test:e2e` | Playwright in a desktop (1366×900), a tablet (768×1024, touch) and a mobile (Pixel 7) browser: sign up / sign out / sign in, planning a day with overlap protection and the daily summary, calendar, focus timer surviving a reload, note autosave and search, reminders, plus an axe accessibility scan and a no-horizontal-scroll check on every main page |
 | All but e2e | `npm test` | Unit + integration |
 
 ## Databases
