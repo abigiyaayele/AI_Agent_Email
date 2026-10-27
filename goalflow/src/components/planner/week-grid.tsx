@@ -103,8 +103,8 @@ export function WeekGrid({ days, items, fromHour, toHour }: { days: CalDay[]; it
       ) : null}
 
       <div className="overflow-x-auto rounded-lg border border-border">
-        <div className="grid min-w-[760px]" style={{ gridTemplateColumns: `3rem repeat(${days.length}, minmax(0, 1fr))` }}>
-          <div className="border-b border-border" />
+        <div className="grid min-w-[640px]" style={{ gridTemplateColumns: `3rem repeat(${days.length}, minmax(0, 1fr))` }}>
+          <div className="sticky left-0 z-10 border-b border-border bg-surface" />
           {days.map((d) => (
             <div key={d.date} className={cn("border-b border-l border-border px-1.5 py-1 text-center text-xs", d.isToday && "bg-accent-soft font-semibold text-accent", !d.working && "bg-surface-2/60")}>
               <Link href={`/today?date=${d.date}`} className="hover:underline">
@@ -113,7 +113,7 @@ export function WeekGrid({ days, items, fromHour, toHour }: { days: CalDay[]; it
             </div>
           ))}
 
-          <div className="border-b border-border px-1 py-1 text-[10px] text-muted">Due</div>
+          <div className="sticky left-0 z-10 border-b border-border bg-surface px-1 py-1 text-[10px] text-muted">Due</div>
           {days.map((d) => (
             <div
               key={d.date}
@@ -129,7 +129,7 @@ export function WeekGrid({ days, items, fromHour, toHour }: { days: CalDay[]; it
             </div>
           ))}
 
-          <div className="relative" style={{ height }}>
+          <div className="sticky left-0 z-10 bg-surface" style={{ height }}>
             {Array.from({ length: to - from }, (_, h) => (
               <span key={h} className="absolute right-1 -translate-y-1.5 text-[10px] text-muted tabular-nums" style={{ top: h * 60 * PX_PER_MIN }}>
                 {pad(from + h)}:00

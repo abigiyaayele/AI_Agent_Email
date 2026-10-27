@@ -157,9 +157,9 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
                 ))}
               </div>
             </fieldset>
-            <label className="mt-2 flex items-center gap-2 text-sm">
+            <label className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
               <input type="checkbox" name="emailReminders" defaultChecked={prefs.emailReminders} />
-              Send email reminders {f.email ? null : <Badge tone="warn">email provider not configured on server</Badge>}
+              Send email reminders {f.email ? null : <Badge tone="warn">email not set up on server</Badge>}
             </label>
           </div>
           <SubmitButton>Save settings</SubmitButton>

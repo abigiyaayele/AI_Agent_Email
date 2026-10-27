@@ -23,6 +23,11 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], viewport: { width: 1366, height: 900 }, storageState: "e2e/.auth/desktop.json" },
     },
     { name: "mobile", dependencies: ["setup"], use: { ...devices["Pixel 7"], storageState: "e2e/.auth/mobile.json" } },
+    {
+      name: "tablet",
+      dependencies: ["setup"],
+      use: { ...devices["Desktop Chrome"], viewport: { width: 768, height: 1024 }, hasTouch: true, storageState: "e2e/.auth/tablet.json" },
+    },
   ],
   webServer: {
     command: `npx next start -p ${PORT}`,

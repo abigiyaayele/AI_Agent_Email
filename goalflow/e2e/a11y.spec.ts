@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const PAGES = ["/dashboard", "/today", "/calendar", "/tasks", "/goals", "/plan/week", "/notes", "/time", "/analytics", "/assistant", "/notifications", "/settings"];
+const PAGES = ["/dashboard", "/today", "/calendar", "/calendar?view=week", "/tasks", "/tasks?layout=board", "/goals", "/plan/week", "/notes", "/time", "/analytics", "/assistant", "/notifications", "/settings"];
 
 test("sign-in page has no serious accessibility violations", async ({ browser }) => {
   const ctx = await browser.newContext();

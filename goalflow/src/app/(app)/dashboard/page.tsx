@@ -119,7 +119,7 @@ export default async function DashboardPage() {
       </Card>
 
       <div className="grid gap-5 lg:grid-cols-5">
-        <div className="space-y-5 lg:col-span-3">
+        <div className="@container space-y-5 lg:col-span-3">
           <Card>
             <CardHeader title="Top three priorities" action={<Link href="/today" className="text-sm text-muted hover:underline">My Day →</Link>} />
             {top3.length ? <TaskListView items={top3.map((r) => toTaskItem(r, tz, now))} tomorrow={addDays(today, 1)} /> : <EmptyState title="Nothing planned for today">Use quick add above, or pull work from your backlog in My Day.</EmptyState>}
@@ -130,7 +130,7 @@ export default async function DashboardPage() {
             ) : null}
           </Card>
 
-          <div className="grid gap-5 md:grid-cols-3">
+          <div className="grid gap-5 @xl:grid-cols-3">
             {horizonCards.map((h) => (
               <Card key={h.level}>
                 <CardHeader title={h.title} action={<Link href={h.href} className="text-xs text-muted hover:underline">Review</Link>} />
@@ -160,7 +160,7 @@ export default async function DashboardPage() {
             ))}
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-5 @lg:grid-cols-2">
             <Card className={overdue.length ? "border-danger/40" : undefined}>
               <CardHeader title="Overdue" />
               <TaskListView items={overdue.map((r) => toTaskItem(r, tz, now))} tomorrow={today} empty={<p className="text-sm text-muted">Nothing overdue.</p>} />

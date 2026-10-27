@@ -125,7 +125,13 @@ export function TaskBoard({ items }: { items: TaskItem[] }) {
           {err}
         </p>
       ) : null}
-      <div className={cn("grid gap-3 md:grid-cols-5", pending && "opacity-70")}>
+      {/* Swipe between columns on phones and tablets; all five side by side when there is room. */}
+      <div
+        role="region"
+        aria-label="Task board"
+        tabIndex={0}
+        className={cn("-mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2 @5xl:mx-0 @5xl:grid @5xl:grid-cols-5 @5xl:overflow-visible @5xl:px-0", pending && "opacity-70")}
+      >
         {TASK_STATUSES.map((status) => {
           const col = items.filter((t) => t.status === status);
           return (
@@ -138,7 +144,7 @@ export function TaskBoard({ items }: { items: TaskItem[] }) {
                 if (dragId) move(dragId, status);
                 setDragId(null);
               }}
-              className="min-h-32 rounded-xl border border-border bg-surface-2/60 p-2"
+              className="min-h-32 w-[min(16rem,80%)] shrink-0 snap-start rounded-xl border border-border bg-surface-2/60 p-2 @5xl:w-auto"
             >
               <h3 className="mb-2 flex items-center justify-between px-1 text-sm font-semibold">
                 {TASK_STATUS_LABEL[status]} <span className="text-xs text-muted">{col.length}</span>
@@ -185,8 +191,9 @@ export function TaskBoard({ items }: { items: TaskItem[] }) {
 
 export function QuickAdd({ date, goals }: { date?: string; goals: GoalOption[] }) {
   return (
-    <ActionForm action={quickAddAction} resetOnSuccess className="grid grid-cols-2 items-start gap-2 sm:grid-cols-[minmax(12rem,1fr)_10rem_7rem_5.5rem_11rem_auto]">
-      <div className="col-span-2 sm:col-span-1">
+    <div className="@container">
+    <ActionForm action={quickAddAction} resetOnSuccess className="grid grid-cols-2 items-start gap-2 @xl:grid-cols-[9.5rem_7rem_5.5rem_minmax(0,1fr)_auto] @5xl:grid-cols-[minmax(12rem,1fr)_10rem_7rem_5.5rem_11rem_auto]">
+      <div className="col-span-2 @xl:col-span-full @5xl:col-span-1">
         <Input name="title" placeholder="Quick add a task…" aria-label="New task title" />
         <FieldError name="title" />
       </div>
@@ -201,10 +208,11 @@ export function QuickAdd({ date, goals }: { date?: string; goals: GoalOption[] }
           </option>
         ))}
       </Select>
-      <SubmitButton pendingText="Adding…" className="col-span-2 sm:col-span-1">
+      <SubmitButton pendingText="Adding…" className="col-span-2 @xl:col-span-1">
         <Plus size={16} /> Add
       </SubmitButton>
     </ActionForm>
+    </div>
   );
 }
 

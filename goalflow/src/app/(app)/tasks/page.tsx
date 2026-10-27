@@ -67,7 +67,7 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
       <Card>
         <QuickAdd goals={goals} />
       </Card>
-      <Card>
+      <Card className="@container">
         <div className="mb-3 flex flex-wrap gap-1.5 text-sm" role="group" aria-label="Views">
           {VIEWS.map(([v, l]) => (
             <Link key={v} href={link({ view: v === "all" ? undefined : v })} className={cn("rounded-lg border px-2.5 py-1", view === v ? "border-accent bg-accent-soft text-accent" : "border-border")}>
@@ -75,10 +75,10 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
             </Link>
           ))}
         </div>
-        <form className="mb-4 grid gap-2 sm:grid-cols-[1fr_9rem_9rem_12rem_9rem_auto]" role="search">
+        <form className="mb-4 grid grid-cols-2 gap-2 @3xl:grid-cols-4 @5xl:grid-cols-[1fr_9rem_9rem_12rem_9rem_auto]" role="search">
           {sp.view ? <input type="hidden" name="view" value={sp.view} /> : null}
           {sp.layout ? <input type="hidden" name="layout" value={sp.layout} /> : null}
-          <Input name="q" defaultValue={sp.q} placeholder="Search tasks…" aria-label="Search tasks" />
+          <Input name="q" defaultValue={sp.q} placeholder="Search tasks…" aria-label="Search tasks" className="col-span-2 @3xl:col-span-3 @5xl:col-span-1" />
           <Select name="status" defaultValue={sp.status ?? ""} aria-label="Status">
             <option value="">Any status</option>
             {TASK_STATUSES.map((s) => (
@@ -109,7 +109,7 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
             <option value="start">Sort: start time</option>
             <option value="created">Sort: newest</option>
           </Select>
-          <button type="submit" className={buttonClass("secondary")}>
+          <button type="submit" className={cn(buttonClass("secondary"), "col-span-2 @3xl:col-span-1")}>
             Apply
           </button>
         </form>
